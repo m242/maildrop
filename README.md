@@ -3,7 +3,8 @@ MailDrop
 
 MailDrop is an open-source, scalable, high-performance version of Mailinator,
 a "temporary inbox" that you can give out when you don't want to give out
-your real e-mail address. MailDrop is designed to be quick and disposable.
+your real e-mail address. MailDrop inboxes are designed to be quick and
+disposable.
 
 The design goals are to be roughly 90% of the speed of Mailinator, while
 adding additional functionality and the ability to horizontally scale
@@ -38,6 +39,13 @@ Requirements
 * [SBT 0.12+](http://www.scala-sbt.org/)
 * [PlayFramework 2.10+](http://www.playframework.com/)
 * [Redis 2.4+](http://redis.io/)
+
+For hardware, an Amazon EC2 small instance should be good to begin.
+MailDrop should take 512M of RAM for the SMTP module, 512M of RAM for
+the web module, and 512M of RAM for the Redis datastore. In practice,
+CPU is not an issue; MailDrop spends most of its time waiting on disk
+or network IO.
+
 
 Installation
 ------------
