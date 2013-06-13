@@ -1,0 +1,52 @@
+@(recipient: String, inbox: List[Map[String, String]])
+@site = @{ play.Play.application().configuration().getString("maildrop.sitename") }
+
+@alt = @{ com.heluna.util.AltInboxUtil.getAltInbox(recipient) }
+@domain = @{play.Play.application().configuration().getString("maildrop.hostname")}
+@tblclass = @{ if(inbox.length > 0) { "len" } else { "empty" }}
+
+@template("inbox", "Inbox for " + recipient) {
+
+  <section id=inbox data-inbox="@recipient">
+    <div class=container>
+      <div class=grid>
+        <div class="unit span-grid">
+          <div id=inboxctl>
+            <h1 id=mainaddr>@{ recipient + "@" + domain }</h1>
+            <div class=clipboard-controls>
+              <a id=clipboard class=clipboard data-clipboard-target=mainaddr href="#"><i class=icon-publish></i></a>
+            </div>
+          </div>
+          <script src='@routes.Assets.at("javascripts/ZeroClipboard.min.js")'></script>
+          <div id=msgs>
+            <h3 id=msgnum>@inbox.length @if(inbox.length == 1) {message} else {messages}. </h3>
+            <a id="inbox-reload" href="@routes.Application.inbox(recipient)">Reload <i id="reload-icon" class="icon-arrows-ccw"></i></a>
+          </div>
+        </div>
+        <div class="unit span-grid">
+          <table id=inboxtbl class="list @tblclass">
+            <thead>
+              <tr>
+                <th class=senderhdr>From</th>
+                <th class=subjecthdr>Subject</th>
+                <th class=datehdr>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for((message, index) <- inbox.zipWithIndex) {
+                <tr data-id='@message.get("id").getOrElse("")'>
+                  <td class=sender>@message.get("sender").getOrElse("(no sender)")</td>
+                  <td class=subject><a href="@routes.Application.message(recipient, message.get("id").getOrElse(""))">@message.get("subject").getOrElse("(no subject)")</a></td>
+                  <td class=date>@message.get("date").getOrElse("(no date)")</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @views.html.messagefooter(alt, domain, site)
+
+}

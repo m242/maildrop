@@ -1,0 +1,35 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index
+GET     /api/suggestion             controllers.Application.getSuggestionJSON
+GET     /api/blocked                controllers.Application.blockedJSON
+GET     /ws/blocked                 controllers.Application.blockedWS
+
+# Inbox page
+POST    /inbox                      controllers.Application.postInbox
+GET     /inbox/:name                controllers.Application.inbox(name: String)
+GET     /api/inbox/:name            controllers.Application.inboxJSON(name: String)
+
+# Message page
+GET     /inbox/:name/:id            controllers.Application.message(name: String, id: String)
+GET     /api/inbox/:name/:id        controllers.Application.messageJSON(name: String, id: String)
+POST    /delete/:name/:id           controllers.Application.delete(name: String, id: String)
+DELETE  /api/inbox/:name/:id        controllers.Application.deleteJSON(name: String, id: String)
+GET     /inbox/:name/:id/raw        controllers.Application.messageRaw(name: String, id: String)
+GET     /inbox/:name/:id/body       controllers.Application.messageBody(name: String, id: String)
+
+# How it works
+GET     /how-it-works               controllers.Application.how
+
+# Contact us
+GET     /contact-us                 controllers.Application.contact
+
+# Privacy policy
+GET     /privacy                    controllers.Application.privacy
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET     /favicon.ico                controllers.Assets.at(path="/public", file="images/favicon.ico")

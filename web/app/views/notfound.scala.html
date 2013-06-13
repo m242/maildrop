@@ -1,0 +1,21 @@
+@(path: String)
+@site = @{ play.Play.application().configuration().getString("maildrop.sitename") }
+
+@template("notfound", "404 - Not Found") {
+
+  <section id=notfound>
+    <div class=container>
+      <div class=grid>
+        <div class="unit one-of-five"></div>
+        <div class="unit three-of-five">
+          <h1>404</h1>
+          <h3>This page does not exist: <em>@path</em></h3>
+          <p>
+            <a href="/">Return to @site home.</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+}

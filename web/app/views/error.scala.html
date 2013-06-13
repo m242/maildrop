@@ -1,0 +1,26 @@
+@(path: String, ex: Throwable)
+@site = @{ play.Play.application().configuration().getString("maildrop.sitename") }
+
+@template("error", "500 - Error") {
+
+  <section id=error>
+    <div class=container>
+      <div class=grid>
+        <div class="unit one-of-five"></div>
+        <div class="unit three-of-five">
+          <h1>500</h1>
+          <h3>There was an error: <em>@path</em></h3>
+          <p>
+            <a href="/">Return to @site home.</a>
+          </p>
+
+<pre>
+@ex.getMessage
+@ex.toString
+</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+}

@@ -1,0 +1,32 @@
+@(alt: String, domain: String, site: String)
+
+<section id=bottom>
+  <div class=container>
+    <div class=grid>
+      <div class="unit left one-of-two">
+        <div class=triangle-down></div>
+        <h3>Alias Address:</h3>
+        <div id=alias>
+          <span id=aliasaddr>@{ alt + "@" + domain }</span>
+          <div class=clipboard-controls>
+            <a id=clipboard2 class=clipboard data-clipboard-target=aliasaddr href="#"><i class=icon-publish></i></a>
+          </div>
+          <script src='@routes.Assets.at("javascripts/ZeroClipboard.min.js")'></script>
+        </div>
+        <p>
+          E-mail sent to the above alias address will also show up in this inbox. Use an alias address when you need
+          a little bit more security - people cannot view the alias address inbox without knowing the original address.
+        </p>
+      </div>
+      <div class="unit one-of-two">
+        <h3>@site Sponsors:</h3>
+        <p><a href="https://heluna.com">Heluna Antispam</a> - Cloud-based antispam for your domain.</p>
+        <p>
+          @site keeps running thanks to the generosity of its sponsors.
+          <a href="@routes.Application.contact()">Please contact us</a> if you're interested in sponsoring
+          @{ site + "." }
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

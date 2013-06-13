@@ -1,0 +1,66 @@
+@(recipient: String, msgId: String, msgFrom: String, msgTo: String, subject: String, msgDate: String, hasHtml: Boolean, message: javax.mail.internet.MimeMessage)
+@site = @{ play.Play.application().configuration().getString("maildrop.sitename") }
+@alt = @{ com.heluna.util.AltInboxUtil.getAltInbox(recipient) }
+@domain = @{play.Play.application().configuration().getString("maildrop.hostname")}
+
+@template("message", subject) {
+
+  <section id=message>
+    <div class=container>
+      <div class=grid>
+        <div id=hdr class="unit span-grid">
+          <h1>@subject</h1>
+          <h3><a href="@routes.Application.inbox(recipient)">Inbox: @recipient</a></h3>
+        </div>
+        <div id=msg class="unit span-grid">
+           <table id=messageheader>
+            <tbody>
+              <tr>
+                <td>From:</td>
+                <td>@msgFrom</td>
+                <td rowspan="3" id=buttons>
+                  <a href="@routes.Application.messageRaw(recipient, msgId)">View Raw Source <i class=icon-doc-text></i></a>
+                  <form method=post action="@routes.Application.delete(recipient, msgId)">
+                    <button type=submit>Delete <i class=icon-trash></i></button>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>To:</td>
+                <td>@msgTo</td>
+              </tr>
+              <tr>
+                <td>Date:</td>
+                <td>@msgDate</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id=messagebody class="unit span-grid">
+        <script>
+          window.__maildrop_iframe = function() {
+            var el = document.getElementById("messageframe");
+            if(el != null) {
+              el.height = 0;
+              if(el.contentDocument) el.height = el.contentDocument.documentElement.scrollHeight + 30;
+              else el.height = el.contentWindow.document.body.scrollHeight + 30;
+            }
+          }
+        </script>
+        @if(message.isMimeType("multipart/*")) {
+          <iframe id=messageframe src="@routes.Application.messageBody(recipient, msgId)" onload="__maildrop_iframe()"></iframe>
+        } else {
+          @if(message.isMimeType("text/html")) {
+            <iframe id=messageframe src="@routes.Application.messageBody(recipient, msgId)" onload="__maildrop_iframe()"></iframe>
+          } else {
+            <pre>@message.getContent.asInstanceOf[String]</pre>
+          }
+        }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @views.html.messagefooter(alt, domain, site)
+
+}

@@ -1,0 +1,28 @@
+@(recipient: String, msgId: String, msgFrom: String, msgTo: String, subject: String, msgDate: String, hasHtml: Boolean, message: javax.mail.internet.MimeMessage)
+@version = @{ play.Play.application().configuration().getString("maildrop.version") }
+
+@import util.MessageUtil
+
+<!DOCTYPE html>
+
+<link rel="stylesheet" href='@routes.Assets.at("stylesheets/maildrop.min.css?v=" + version)'>
+
+@if(message.isMimeType("multipart/*")) {
+  @for(part <- MessageUtil.getParts(message)) {
+    <div>
+    @if(part.isMimeType("text/html")) {
+      @Html(part.getContent.asInstanceOf[String])
+    } else {
+      @if(!hasHtml && part.isMimeType("text/*")) {
+        <pre id="msgpre">@part.getContent.asInstanceOf[String]</pre>
+      }
+    }
+    </div>
+  }
+} else {
+  @if(message.isMimeType("text/html")) {
+    @Html(message.getContent.asInstanceOf[String])
+  } else {
+    <pre id="msgpre">@message.getContent.asInstanceOf[String]</pre>
+  }
+}
