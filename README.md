@@ -1,4 +1,4 @@
-maildrop
+MailDrop
 ========
 
 MailDrop is an open-source, scalable, high-performance version of Mailinator.
@@ -14,9 +14,9 @@ the speed expected for a high-speed mail and web app.
 Requirements
 ------------
 
-* SBT 0.12+
-* PlayFramework 2.10+
-* Redis 2.4+
+* [SBT 0.12+](http://www.scala-sbt.org/)
+* [PlayFramework 2.10+](http://www.playframework.com/)
+* [Redis 2.4+](http://redis.io/)
 
 Installation
 ------------
