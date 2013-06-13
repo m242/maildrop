@@ -50,13 +50,13 @@ or network IO.
 Installation
 ------------
 
-* Clone the repository into a local directory
+### Clone the repository into a local directory
 
 This will give you three subdirectories, "common" is the shared set of utility
 classes and models, "smtp" is the mail transfer agent, and "web" is the
 website.
 
-* Create the SMTP server
+### Create the SMTP server
 
 Go into "smtp" and run "sbt compile". This will create a jar of the MailDrop
 SMTP server. If you like, you can create a single jar with all dependencies
@@ -66,7 +66,7 @@ To run the SMTP server, use "java -jar (jarfile) MailDrop". If you want to use a
 custom configuration, use "java -Dconfig.file=/path/to/your/application.conf
 -jar (jarfile) MailDrop".
 
-* Create the web server
+### Create the web server
 
 Go into "web" and run "play dist". This will create a zipfile of the MailDrop
 website. (More information about how to run a Play web app is located on the
