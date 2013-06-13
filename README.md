@@ -37,7 +37,7 @@ Requirements
 ------------
 
 * [SBT 0.12+](http://www.scala-sbt.org/)
-* [PlayFramework 2.10+](http://www.playframework.com/)
+* [PlayFramework 2.1.0+](http://www.playframework.com/)
 * [Redis 2.4+](http://redis.io/)
 
 For hardware, an Amazon EC2 small instance should be good to begin.
