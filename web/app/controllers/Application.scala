@@ -14,9 +14,9 @@ import play.api.libs.iteratee.{Concurrent, Iteratee}
 
 object Application extends Controller {
 
-  val adjectives = Source.fromFile("conf/adjectives.txt").getLines().toArray
+  val adjectives = Source.fromInputStream(this.getClass.getClassLoader.getResourceAsStream("adjectives.txt")).getLines().toArray
   val adjectivesLen = adjectives.length
-  val nouns = Source.fromFile("conf/nouns.txt").getLines().toArray
+  val nouns = Source.fromInputStream(this.getClass.getClassLoader.getResourceAsStream("nouns.txt")).getLines().toArray
   val nounsLen = nouns.length
   val rand = new Random(System.currentTimeMillis())
 
