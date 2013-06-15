@@ -1,6 +1,8 @@
 MailDrop
 ========
 
+See [MailDrop in action](http://maildrop.cc).
+
 MailDrop is an open-source, scalable, high-performance version of Mailinator,
 a "temporary inbox" that you can give out when you don't want to give out
 your real e-mail address. MailDrop inboxes are designed to be quick and
