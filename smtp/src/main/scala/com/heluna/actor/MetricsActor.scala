@@ -58,6 +58,6 @@ class MetricsActor extends Actor with Redis with Logging {
 		case msg => logger error "Got unknown message in MetricsActor: " + msg.toString + " " + self.path.name + " at " + new Date().getTime
 	}
 
-	def metricsKey = new SimpleDateFormat("yyyy/MM/dd").format(new Date())
+	private val metricsKey = new SimpleDateFormat("yyyy/MM/dd").format(new Date())
 
 }
