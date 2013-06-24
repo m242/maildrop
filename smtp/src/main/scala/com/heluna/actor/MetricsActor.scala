@@ -21,37 +21,28 @@ import com.heluna.actor.MetricsActor._
 class MetricsActor extends Actor with Redis with Logging {
 
   def receive = {
-    case Connection =>
-      try {
-        redis.incr(metricsKey + "/connection")
-      } catch {
-        case e: Exception => {
-          // Redis has gone away, just reschedule the message
-          context.system.scheduler.scheduleOnce(1 minute, self, Connection)
-        }
-      }
-    case Message =>
-      try {
-        redis.incr(metricsKey + "/message")
-      } catch {
-        case e: Exception => {
-          // Redis has gone away, just reschedule the message
-          context.system.scheduler.scheduleOnce(1 minute, self, Message)
-        }
-      }
-    case Blocked =>
-      try {
-        val b = redis.incr("blocked").getOrElse(0L)
-        redis.incr(metricsKey + "/blocked")
-        redis.publish(BlockedUtil.CHANNEL, b.toString)
-      } catch {
-        case e: Exception =>
-          // Redis has gone away, just reschedule the message
-          context.system.scheduler.scheduleOnce(1 minute, self, Blocked)
-      }
-
+    case Connection => resendOnException(Connection) {
+      redis.incr(metricsKey + "/connection")
+    }
+    case Message => resendOnException(Message) {
+      redis.incr(metricsKey + "/message")
+    }
+    case Blocked => resendOnException(Blocked) {
+      val b = redis.incr("blocked").getOrElse(0L)
+      redis.incr(metricsKey + "/blocked")
+      redis.publish(BlockedUtil.CHANNEL, b.toString)
+    }
     case msg => logger error "Got unknown message in MetricsActor: " + msg.toString + " " + self.path.name + " at " + new Date().getTime
   }
+
+  private def resendOnException(event: Event)(block: => Unit) =
+    try {
+      block
+    } catch {
+      case e: Exception =>
+        // Redis has gone away, just reschedule the message
+        context.system.scheduler.scheduleOnce(1 minute, self, event)
+    }
 
   private val formatter = new SimpleDateFormat("yyyy/MM/dd")
   private def metricsKey = formatter.format(new Date())
@@ -62,5 +53,4 @@ object MetricsActor {
   case object Connection extends Event
   case object Message extends Event
   case object Blocked extends Event
-
 }
