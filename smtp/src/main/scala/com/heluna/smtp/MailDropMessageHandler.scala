@@ -15,6 +15,7 @@ import scala.language.postfixOps
 import scala.concurrent.Await
 import javax.mail.Session
 import javax.mail.internet.MimeMessage
+import com.heluna.actor.MetricsActor._
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,7 +39,7 @@ class MailDropMessageHandler(ctx: MessageContext) extends Object with MessageHan
 		logger debug "Starting"
 
 		// Metrics actor log connection
-		MailDropSystem.metricsActor ! "connection"
+		MailDropSystem.metricsActor ! Connection
 
 		// Wait maildrop.command-delay seconds
 		Thread sleep delay
@@ -51,11 +52,11 @@ class MailDropMessageHandler(ctx: MessageContext) extends Object with MessageHan
 			case Continue() => sender = Some(from)
 			case Reject(reason) => {
 				logger debug "Reject ip: " + ip + " helo: " + helo + " from: " + from + " reason: " + reason
-				MailDropSystem.metricsActor ! "blocked"
+				MailDropSystem.metricsActor ! Blocked
 				throw new DropConnectionException(reason)
 			}
 			case Greylist(reason) => {
-				MailDropSystem.metricsActor ! "blocked"
+				MailDropSystem.metricsActor ! Blocked
 				throw new DropConnectionException(421, reason)
 			}
 			case _ => throw new Exception("Error in processing.")
@@ -78,7 +79,7 @@ class MailDropMessageHandler(ctx: MessageContext) extends Object with MessageHan
 			case Continue() => recipient = Some(to)
 			case Reject(reason) => {
 				logger debug "Reject recipient ip: " + ip + " to: " + to + " reason: " + reason
-				MailDropSystem.metricsActor ! "blocked"
+				MailDropSystem.metricsActor ! Blocked
 				throw new RejectException(reason)
 			}
 		}
@@ -103,11 +104,11 @@ class MailDropMessageHandler(ctx: MessageContext) extends Object with MessageHan
 				MailDropSystem.saveMessageActor ! (sender.getOrElse(""), recipient.getOrElse(""), message)
 
 				// Metrics actor log message
-				MailDropSystem.metricsActor ! "message"
+				MailDropSystem.metricsActor ! Message
 			}
 			case Reject(reason) => {
 				logger debug "Reject data ip: " + ip + " reason: " + reason
-				MailDropSystem.metricsActor ! "blocked"
+				MailDropSystem.metricsActor ! Blocked
 				throw new RejectException(reason)
 			}
 		}
