@@ -9,6 +9,7 @@ import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import com.heluna.util.BlockedUtil
+import com.heluna.actor.MetricsActor._
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,45 +20,37 @@ import com.heluna.util.BlockedUtil
 
 class MetricsActor extends Actor with Redis with Logging {
 
-	def receive = {
+  def receive = {
+    case Connection => resendOnException(Connection) {
+      redis.incr(metricsKey + "/connection")
+    }
+    case Message => resendOnException(Message) {
+      redis.incr(metricsKey + "/message")
+    }
+    case Blocked => resendOnException(Blocked) {
+      val b = redis.incr("blocked").getOrElse(0L)
+      redis.incr(metricsKey + "/blocked")
+      redis.publish(BlockedUtil.CHANNEL, b.toString)
+    }
+    case msg => logger error "Got unknown message in MetricsActor: " + msg.toString + " " + self.path.name + " at " + new Date().getTime
+  }
 
-		case "connection" => {
-			try {
-				redis.incr(metricsKey + "/connection")
-			} catch {
-				case e: Exception => {
-					// Redis has gone away, just reschedule the message
-					context.system.scheduler.scheduleOnce(1 minute, self, "connection")
-				}
-			}
-		}
+  private def resendOnException(event: Event)(block: => Unit) =
+    try {
+      block
+    } catch {
+      case e: Exception =>
+        // Redis has gone away, just reschedule the message
+        context.system.scheduler.scheduleOnce(1 minute, self, event)
+    }
 
-		case "message" => {
-			try {
-				redis.incr(metricsKey + "/message")
-			} catch {
-				case e: Exception => {
-					// Redis has gone away, just reschedule the message
-					context.system.scheduler.scheduleOnce(1 minute, self, "message")
-				}
-			}
-		}
+  private val formatter = new SimpleDateFormat("yyyy/MM/dd")
+  private def metricsKey = formatter.format(new Date())
+}
 
-		case "blocked" => {
-			try {
-				val b = redis.incr("blocked").getOrElse(0L)
-				redis.incr(metricsKey + "/blocked")
-				redis.publish(BlockedUtil.CHANNEL, b.toString)
-			} catch {
-				case e: Exception =>
-					// Redis has gone away, just reschedule the message
-					context.system.scheduler.scheduleOnce(1 minute, self, "blocked")
-			}
-		}
-
-		case msg => logger error "Got unknown message in MetricsActor: " + msg.toString + " " + self.path.name + " at " + new Date().getTime
-	}
-
-	def metricsKey = new SimpleDateFormat("yyyy/MM/dd").format(new Date())
-
+object MetricsActor {
+  sealed trait Event
+  case object Connection extends Event
+  case object Message extends Event
+  case object Blocked extends Event
 }
