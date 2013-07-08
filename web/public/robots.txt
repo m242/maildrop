@@ -1,0 +1,5 @@
+User-Agent: *
+Disallow: /tyrellcorporation
+Disallow: /voightkampff
+Disallow: /inbox/
+Disallow: /api/inbox/
