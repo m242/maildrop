@@ -19,7 +19,7 @@ object SenderbaseFilter extends Logging {
 
 	def check(inet: InetAddress): Product = {
 		val rev = DNSBLFilter.reverse(inet)
-		val senderbaseUrl = rev + ".query.senderbase.org"
+		val senderbaseUrl = rev + ".sa.senderbase.org"
 		// Run query against Senderbase
 		query(senderbaseUrl) match {
 			case Some(result) => {
