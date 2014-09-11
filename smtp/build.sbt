@@ -1,36 +1,24 @@
-import AssemblyKeys._
+name := "smtp"
 
-assemblySettings
+version := "2.0"
 
-name := "maildropsmtp"
+lazy val common = RootProject(file("../common"))
 
-version := "1.0"
+val main = Project(id="smtp", base=file(".")).dependsOn(common)
 
-scalaVersion := "2.10.0"
+scalaVersion := "2.11.2"
 
-resolvers += "JBoss Thirdparty Uploads" at "https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/"
-
-unmanagedSourceDirectories in Compile += file("../common/src")
-
-libraryDependencies ++= Seq(
-	"com.typesafe" % "config" % "1.0.0",
-	"com.typesafe" % "scalalogging-slf4j_2.10" % "1.0.1",
-	"com.typesafe.akka" % "akka-actor_2.10" % "2.1.2",
-	"net.debasishg" % "redisclient_2.10" % "2.10",
-	"org.apache.james.jspf" % "apache-jspf-resolver" % "1.0.0",
-	"org.json4s" % "json4s-native_2.10" % "3.2.2",
-	"org.slf4j" % "slf4j-api" % "1.7.5",
-	"org.slf4j" % "slf4j-log4j12" % "1.7.5",
-	"org.subethamail" % "subethasmtp" % "3.1.7",
-	"org.xbill" % "dnsjava" % "2.0.8"
+resolvers ++= Seq(
+	"rediscala" at "http://dl.bintray.com/etaty/maven",
+	"Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 )
 
-mainClass in assembly := Some("com.heluna.smtp.MailDrop")
-
-mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
-  {
-    case "application.conf" => MergeStrategy.concat
-    case "log4j.properties" => MergeStrategy.first
-    case x => old(x)
-  }
-}
+libraryDependencies ++= Seq(
+	"com.typesafe.akka" % "akka-actor_2.11" % "2.3.6",
+	"com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
+	"ch.qos.logback" % "logback-classic" % "1.1.2",
+	"org.apache.james.jspf" % "apache-jspf-resolver" % "1.0.0",
+	"com.typesafe.play" %% "play-json" % "2.3.4",
+	"org.subethamail" % "subethasmtp" % "3.1.7",
+	"dnsjava" % "dnsjava" % "2.1.6"
+)

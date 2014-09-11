@@ -1,36 +1,33 @@
 @(tmpl: String, title: String)(content: Html)
-@version = @{ play.Play.application().configuration().getString("maildrop.version") }
-@site = @{ play.Play.application().configuration().getString("maildrop.sitename") }
-@desc = @{ play.Play.application().configuration().getString("maildrop.description").replaceAll("\"", "'") }
-@gaEnabled = @{ play.Play.application().configuration().getBoolean("maildrop.google-analytics.enabled") }
-@typekitEnabled = @{ play.Play.application().configuration().getBoolean("maildrop.typekit.enabled") }
-@domain = @{ play.Play.application().configuration().getString("maildrop.hostname") }
-@maxInbox = @{ play.Play.application().configuration().getInt("maildrop.recipient.max-addr-length") }
-
+@import play.api.Play
+@site = @{ Play.current.configuration.getString("maildrop.sitename").getOrElse("MailDrop") }
+@desc = @{ Play.current.configuration.getString("maildrop.description").getOrElse("").replaceAll("\"", "'") }
+@gaEnabled = @{ Play.current.configuration.getBoolean("maildrop.google-analytics.enabled").getOrElse(false) }
+@typekitEnabled = @{ Play.current.configuration.getBoolean("maildrop.typekit.enabled").getOrElse(false) }
+@domain = @{ Play.current.configuration.getString("maildrop.hostname").getOrElse("localhost") }
+@maxInbox = @{ Play.current.configuration.getInt("maildrop.recipient.max-addr-length").getOrElse(20) }
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=en> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=en> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=en> <![endif]-->
-<!--[if IE 9]>         <html class="no-js lt-ie10" lang=en> <![endif]-->
-<!--[if gt IE 9]><!--> <html class="no-js" lang=en> <!--<![endif]-->
+<!--[if lt IE 9]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if IE 9]><html class="no-js lt-ie10" lang="en"><![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1">
 <title>@if(title != "") {@title | @site} else {@site}</title>
 <meta name="viewport" content="initial-scale=1.0, width=device-width">
 @if(tmpl == "index") {<meta name="description" content="@desc">}
-<link rel="stylesheet" href='@routes.Assets.at("stylesheets/maildrop.min.css?v=" + version)'>
-<!--[if lt IE 9]>
-<script src='@routes.Assets.at("javascripts/html5shiv.js")'></script>
+<link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/maildrop.min.css")">
+<!--[if lt IE9]>
+<script src="@routes.Assets.versioned("javascripts/html5shiv.js")"></script>
 <![endif]-->
 @if(typekitEnabled) {
 <script type="text/javascript" src="//use.typekit.net/@{play.Play.application().configuration()
-    .getString("maildrop.typekit.kitid") + ".js"}"></script>
+		.getString("maildrop.typekit.kitid") + ".js"}"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 <style type="text/css">
 h1,h2,h3,h4,h5,h6 { font-family: @{play.Play.application().configuration()
-    .getString("maildrop.typekit.header-font")},sans-serif }
-body, input, p { font-family: @{play.Play.application().configuration().getString("maildrop.typekit.body-font")},sans-serif }
+		.getString("maildrop.typekit.header-font")},sans-serif }
+body, input, p { font-family: @{play.Play.application().configuration().getString("maildrop.typekit.body-font")},sans-serif; }
 </style>
 } else {
 <link rel=stylesheet href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
@@ -42,72 +39,72 @@ body, input, p { font-family: "Open Sans", sans-serif; }
 <body id="template-@tmpl">
 
 <header>
-  <div class=container>
-    <div class=grid>
-      <div class="unit one-of-five">
-        <div id=logo><a href="/">
-          <div id=logo-icon class=icon-inbox></div>
-          <div id=logo-text>@site</div>
-          </a>
-        </div>
-      </div>
-      <div class="unit four-of-five">
-        <nav class=pull-right>
-          @if(tmpl == "howitworks") {
-          <a href="@routes.Application.how()" class="active">How It Works</a>
-          } else {
-          <a href="@routes.Application.how()">How It Works</a>
-          }
-          @if(tmpl == "contact") {
-          <a href="@routes.Application.contact()" class="active">Contact Us</a>
-          } else {
-          <a href="@routes.Application.contact()">Contact Us</a>
-          }
-          <form id=nav-form method=post class=inbox-form action="@routes.Application.postInbox()">
-            <input id="nav-inbox" type=text class=mailbox maxlength="@maxInbox" name=mailbox placeholder="view-this-mailbox">
-            <label for=nav-inbox>@{ "@ " + domain }</label>
-            <button type=submit>GO<i class=icon-right-open></i></button>
-          </form>
-        </nav>
-      </div>
-    </div>
-  </div>
+	<div class=container>
+		<div class=grid>
+			<div class="unit one-of-five">
+				<div id=logo><a href="/">
+					<div id=logo-icon class=icon-inbox></div>
+					<div id=logo-text>@site</div>
+				</a>
+				</div>
+			</div>
+			<div class="unit four-of-five">
+				<nav class=pull-right>
+					@if(tmpl == "howitworks") {
+						<a href="@routes.Application.how()" class="active">How It Works</a>
+					} else {
+						<a href="@routes.Application.how()">How It Works</a>
+					}
+					@if(tmpl == "contact") {
+						<a href="@routes.Application.contact()" class="active">Contact Us</a>
+					} else {
+						<a href="@routes.Application.contact()">Contact Us</a>
+					}
+					<form id=nav-form method=post class=inbox-form action="@routes.Application.postInbox()">
+						<input id="nav-inbox" type=text class=mailbox maxlength="@maxInbox" name=mailbox placeholder="view-this-mailbox">
+						<label for=nav-inbox>@{ "@ " + domain }</label>
+						<button type=submit>GO<i class=icon-right-open></i></button>
+					</form>
+				</nav>
+			</div>
+		</div>
+	</div>
 </header>
 
-@content
+	@content
 
 <footer>
-  <div class=container>
-    <div class=grid>
-      <div class="unit span-grid">
-        <i class=icon-inbox></i>
-        <p>
-          <a href="@routes.Application.how()">How @site Works</a>
-          <a href="@routes.Application.contact()">Contact Us</a>
-          <a href="@routes.Application.privacy()">Privacy Policy (Please Read!)</a>
-        </p>
-      </div>
-      <div class="unit span-grid">
-        <p id=copyright>
-          Created in California by <a href="https://heluna.com/">Heluna</a> &#169;
-          @{ java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) }
-          Build @version
-        </p>
-      </div>
-    </div>
-  </div>
+	<div class=container>
+		<div class=grid>
+			<div class="unit span-grid">
+				<i class=icon-inbox></i>
+				<p>
+					<a href="@routes.Application.how()">How @site Works</a>
+					<a href="@routes.Application.contact()">Contact Us</a>
+					<a href="@routes.Application.privacy()">Privacy Policy (Please Read!)</a>
+				</p>
+			</div>
+			<div class="unit span-grid">
+				<p id=copyright>
+					Created in California by <a href="https://heluna.com/">Heluna</a> &#169;
+				@{ java.util.Calendar.getInstance().get(java.util.Calendar.YEAR) }
+					Build @{ Play.current.configuration.getString("maildrop.version") }
+				</p>
+			</div>
+		</div>
+	</div>
 </footer>
 
-<script src='@routes.Assets.at("javascripts/maildrop.min.js?v=" + version)'></script>
+<script src="@routes.Assets.versioned("javascripts/maildrop.js")"></script>
 
 @if(gaEnabled) {
-<script>
-  var _gaq=[['_setAccount','@{ play.Play.application().configuration()
-    .getString("maildrop.google-analytics.account") }'],['_trackPageview']];
-  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-  g.src='//www.google-analytics.com/ga.js';
-  s.parentNode.insertBefore(g,s)}(document,'script'));
-</script>
+	<script>
+	var _gaq=[['_setAccount','@{ play.Play.application().configuration()
+			.getString("maildrop.google-analytics.account") }'],['_trackPageview']];
+	(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+	g.src='//www.google-analytics.com/ga.js';
+	s.parentNode.insertBefore(g,s)}(document,'script'));
+	</script>
 }
 
 </body>

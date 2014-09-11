@@ -1,18 +1,21 @@
 import play.api.mvc.{RequestHeader, WithFilters}
-import play.extras.iteratees.GzipFilter
+import play.filters.gzip.GzipFilter
 import play.api.mvc.Results._
 
+import scala.concurrent.Future
+
 /**
- * Created with IntelliJ IDEA.
- * User: mark
- * Date: 5/29/13
- * Time: 8:15 PM
+ * web
+ * User: markbe
+ * Date: 9/11/14
+ * Time: 2:04 PM
  */
 
-object Global extends WithFilters(new GzipFilter()) {
+object Global extends WithFilters(new GzipFilter(shouldGzip = (request, response) =>
+	response.headers.get("Content-Type").exists(c => c.startsWith("text/html") || c.startsWith("application/json")))) {
 
-  override def onHandlerNotFound(request: RequestHeader) = NotFound(views.html.notfound(request.path))
+	override def onHandlerNotFound(request: RequestHeader) = Future.successful(NotFound(views.html.notfound(request.path)))
 
-  override def onError(request: RequestHeader, ex: Throwable) = InternalServerError(views.html.error(request.path, ex))
+	override def onError(request: RequestHeader, ex: Throwable) = Future.successful(InternalServerError(views.html.error(request.path, ex)))
 
 }

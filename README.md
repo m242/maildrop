@@ -38,9 +38,9 @@ senders and data
 Requirements
 ------------
 
-* [SBT 0.12+](http://www.scala-sbt.org/)
-* [PlayFramework 2.1.0+](http://www.playframework.com/)
-* [Redis 2.4+](http://redis.io/)
+* [SBT 0.13+](http://www.scala-sbt.org/)
+* [PlayFramework 2.3.4+](http://www.playframework.com/)
+* [Redis 2.6+](http://redis.io/)
 
 For hardware, an Amazon EC2 small instance should be good to begin.
 MailDrop should take 512M of RAM for the SMTP module, 512M of RAM for
@@ -78,4 +78,31 @@ To run the web server, simply use the "start" command inside the zipfile, or
 again to specify a custom configuration use start 
 -Dconfig.file=/path/to/your/application.conf
 
+
+Changelog
+---------
+
+Version 2.0 is a rewrite of the internals of MailDrop. The site itself has
+the same look and feel, but the way messages are dealt with is slightly
+different.
+
+The primary change is a switch to
+[rediscala](https://github.com/etaty/rediscala) to connect to the Redis
+instance. rediscala is a Reactive driver and performs much better than
+the old Redis client.
+
+Next, many of the actors and supervisors have been tossed in favor of
+simple Scala futures. This has simplified the codebase while still
+allowing for high performance-- MailDrop just won't be able to be as
+finely tuned (custom dispatchers, guaranteed message delivery, etc).
+
+Messages are now stored in Redis in json format instead of as serialized
+ByteStrings. The overhead of json parsing on the website is minimal and
+allows for a better overall view of the data inside Redis. The string
+compression has been removed, requiring a bit more RAM for your Redis
+instance, but again this should be a minimal impact.
+
+Last, Play has been updated to the 2.3 branch, along with automatic
+asset versioning and a much cleaner way to cache assets. Website
+performance should be increased vs. the previous version of MailDrop.
 

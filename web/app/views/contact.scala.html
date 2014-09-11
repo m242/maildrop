@@ -1,82 +1,82 @@
 @site = @{ play.Play.application().configuration().getString("maildrop.sitename") }
 @domain = @{play.Play.application().configuration().getString("maildrop.hostname")}
-@contactUs = @{ com.heluna.util.AltInboxUtil.getAltInbox(play.Play.application().configuration().getString("maildrop.contactaddr")) + "@" + domain }
+@contactUs = @{ com.heluna.maildrop.util.AltInbox.getAltInbox(play.Play.application().configuration().getString("maildrop.contactaddr")) + "@" + domain }
 
 @template("contact", "Contact Us") {
 
-  <section id=contact>
-    <div class=container>
-      <div class=grid>
-        <div class="unit one-of-five"></div>
-        <div class="unit three-of-five">
-          <h1>Have Questions or Comments?</h1>
+	<section id=contact>
+		<div class=container>
+			<div class=grid>
+				<div class="unit one-of-five"></div>
+				<div class="unit three-of-five">
+					<h1>Have Questions or Comments?</h1>
 
-          <p>
-            We're happy to answer any questions or discuss any comments you might have. First, though, please take
-            these notes into consideration.
-          </p>
+					<p>
+						We're happy to answer any questions or discuss any comments you might have. First, though, please take
+						these notes into consideration.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>@site Cannot Send You E-mail.</h3>
+					<h3>@site Cannot Send You E-mail.</h3>
 
-          <p>
-            @site is designed to accept e-mail messages only, and cannot send any messages. If you see any messages
-            coming from @domain, please ignore and delete them - someone else is spoofing @domain addresses.
-            There is no way to send a message from a @site inbox to another e-mail address.
-          </p>
+					<p>
+						@site is designed to accept e-mail messages only, and cannot send any messages. If you see any messages
+						coming from @domain, please ignore and delete them - someone else is spoofing @domain addresses.
+						There is no way to send a message from a @site inbox to another e-mail address.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>Messages in Your Inbox May Disappear Anytime.</h3>
+					<h3>Messages in Your Inbox May Disappear Anytime.</h3>
 
-          <p>
-            Due to the amount of incoming mail, older messages and inboxes that haven't received a message in a while
-            may be automatically deleted to make space. If you're looking for a message that is older than @{ play.Play.application().configuration().getString("maildrop.mailbox.expires") }
-            it is extremely likely that the message is gone.
-          </p>
+					<p>
+						Due to the amount of incoming mail, older messages and inboxes that haven't received a message in a while
+						may be automatically deleted to make space. If you're looking for a message that is older than @{ play.Play.application().configuration().getString("maildrop.mailbox.expires") }
+						it is extremely likely that the message is gone.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>Anyone Can Read Your @site E-mail.</h3>
+					<h3>Anyone Can Read Your @site E-mail.</h3>
 
-          <p>
-            Please see <a href="@routes.Application.privacy()">our Privacy Policy</a> for more information. Since
-            @site doesn't require any logins or passwords, please do not use your @site inbox for anything that you
-            would like to be kept private or secure. @site addresses are meant to be temporary and disposable.
-          </p>
+					<p>
+						Please see <a href="@routes.Application.privacy()">our Privacy Policy</a> for more information. Since
+						@site doesn't require any logins or passwords, please do not use your @site inbox for anything that you
+						would like to be kept private or secure. @site addresses are meant to be temporary and disposable.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>@site Greylists Every E-mail Server.</h3>
+					<h3>@site Greylists Every E-mail Server.</h3>
 
-          <p>
-            If @site receives a message from an e-mail server it hasn't communicated with yet, that server goes
-            onto something called a "greylist", where the server is told it needs to re-try the message after a
-            given period of time. Due to this, messages from new (to @site) servers may be delayed by at least
-            fifteen minutes, and often times up to an hour.
-          </p>
+					<p>
+						If @site receives a message from an e-mail server it hasn't communicated with yet, that server goes
+						onto something called a "greylist", where the server is told it needs to re-try the message after a
+						given period of time. Due to this, messages from new (to @site) servers may be delayed by at least
+						fifteen minutes, and often times up to an hour.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>@site Deletes Every Attachment.</h3>
+					<h3>@site Deletes Every Attachment.</h3>
 
-          <p>
-            Any files (photos, e-mail messages, documents, zip files, etc) that are attached to incoming e-mail
-            messages are removed before the message is delivered to your inbox.
-          </p>
+					<p>
+						Any files (photos, e-mail messages, documents, zip files, etc) that are attached to incoming e-mail
+						messages are removed before the message is delivered to your inbox.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>Still Have a Question or Comment?</h3>
+					<h3>Still Have a Question or Comment?</h3>
 
-          <p>
-            No problem - just e-mail @site at <a href="mailto:@contactUs">@contactUs</a> (yes, you're e-mailing
-            a @site inbox alias!).
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+					<p>
+						No problem - just e-mail @site at <a href="mailto:@contactUs">@contactUs</a> (yes, you're e-mailing
+						a @site inbox alias!).
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
 }

@@ -3,154 +3,154 @@
 
 @template("howitworks", "How " + site + " Works") {
 
-  <section id=how>
-    <div class=container>
-      <div class=grid>
-        <div class="unit one-of-five"></div>
-        <div class="unit three-of-five">
-          <h1>"Please Enter Your E-mail Address."</h1>
+	<section id=how>
+		<div class=container>
+			<div class=grid>
+				<div class="unit one-of-five"></div>
+				<div class="unit three-of-five">
+					<h1>"Please Enter Your E-mail Address."</h1>
 
-          <p>
-            What's your default reaction when you see that statement in a page, or an app, or someone asks you that
-            question? For a large amount of people, a sudden feeling of unease, dread, or mistrust immediately
-            washes over them, and for good reason. E-mail, once a valued communication medium online, is now almost
-            entirely dominated by spam, marketing junk, and unimportant messages that do nothing but waste your
-            time.
-          </p>
+					<p>
+						What's your default reaction when you see that statement in a page, or an app, or someone asks you that
+						question? For a large amount of people, a sudden feeling of unease, dread, or mistrust immediately
+						washes over them, and for good reason. E-mail, once a valued communication medium online, is now almost
+						entirely dominated by spam, marketing junk, and unimportant messages that do nothing but waste your
+						time.
+					</p>
 
-          <p>
-            These days, giving out your e-mail address is a very personal act, as it implies a level of trust that
-            often times you're not willing to give to any random website or app. You're entrusting the site, or app,
-            or company, not to sell or give out your address. You're also trusting their security, that they won't
-            get hacked, or otherwise lose your personal info.
-          </p>
+					<p>
+						These days, giving out your e-mail address is a very personal act, as it implies a level of trust that
+						often times you're not willing to give to any random website or app. You're entrusting the site, or app,
+						or company, not to sell or give out your address. You're also trusting their security, that they won't
+						get hacked, or otherwise lose your personal info.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>Enter @site to the Rescue.</h3>
+					<h3>Enter @site to the Rescue.</h3>
 
-          <p>
-            @site is a free throwaway e-mail address. It's temporary. It's transient. It's disposable. It's meant for
-            those times when you don't want to give out your real address. Just give someone any e-mail address in
-            the @domain domain, come back here, put in the e-mail address, and you can see that inbox.
-          </p>
+					<p>
+						@site is a free throwaway e-mail address. It's temporary. It's transient. It's disposable. It's meant for
+						those times when you don't want to give out your real address. Just give someone any e-mail address in
+						the @domain domain, come back here, put in the e-mail address, and you can see that inbox.
+					</p>
 
-          <p>
-            @site has no signups.
-          </p>
+					<p>
+						@site has no signups.
+					</p>
 
-          <p>
-            @site has no passwords.
-          </p>
+					<p>
+						@site has no passwords.
+					</p>
 
-          <p>
-            @site is designed for no security.
-          </p>
+					<p>
+						@site is designed for no security.
+					</p>
 
-          <p>
-            @site is designed for little to no privacy.
-          </p>
+					<p>
+						@site is designed for little to no privacy.
+					</p>
 
-          <p>
-            @site offers the ability to give out a quick e-mail address to any site or app, then after you've
-            established more trust with that site, you can give them your real e-mail address.
-          </p>
+					<p>
+						@site offers the ability to give out a quick e-mail address to any site or app, then after you've
+						established more trust with that site, you can give them your real e-mail address.
+					</p>
 
-          <p>
-            @site helps to stop your inbox from getting flooded with spam from that one time you registered on a site
-            which got hacked.
-          </p>
+					<p>
+						@site helps to stop your inbox from getting flooded with spam from that one time you registered on a site
+						which got hacked.
+					</p>
 
-          <p>
-            @site can be used to get your receipt for your e-commerce purchase, without signing up to be spammed on
-            a regular basis with "latest offers".
-          </p>
+					<p>
+						@site can be used to get your receipt for your e-commerce purchase, without signing up to be spammed on
+						a regular basis with "latest offers".
+					</p>
 
-          <p>
-            In short, @site can help you cut out the amount of junk in your inbox.
-          </p>
+					<p>
+						In short, @site can help you cut out the amount of junk in your inbox.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>What Kind of E-mail Does @site Accept?</h3>
+					<h3>What Kind of E-mail Does @site Accept?</h3>
 
-          <p>
-            @site is extremely strict about the content of messages allowed into inboxes. Plain text or HTML e-mails
-            are allowed, but must be less than @{ play.Play.application().configuration().getString("maildrop.data.max-message-size") }
-            in length. All attachments in messages are removed and discarded - this means no sending files to an inbox.
-          </p>
+					<p>
+						@site is extremely strict about the content of messages allowed into inboxes. Plain text or HTML e-mails
+						are allowed, but must be less than @{ play.Play.application().configuration().getString("maildrop.data.max-message-size") }
+						in length. All attachments in messages are removed and discarded - this means no sending files to an inbox.
+					</p>
 
-          <p>
-            An inbox can hold at most @{ play.Play.application().configuration().getInt("maildrop.mailbox.max-length") }
-            messages, and any inbox which does not receive a message within @{ play.Play.application().configuration().getString("maildrop.mailbox.expires") }
-            will be automatically cleared. Additionally, there is a finite amount of space to store all of the messages
-            in all @site inboxes, so any particular inbox that has not recently received a message may be cleared to
-            make room for more active inboxes.
-          </p>
+					<p>
+						An inbox can hold at most @{ play.Play.application().configuration().getInt("maildrop.mailbox.max-length") }
+						messages, and any inbox which does not receive a message within @{ play.Play.application().configuration().getString("maildrop.mailbox.expires") }
+						will be automatically cleared. Additionally, there is a finite amount of space to store all of the messages
+						in all @site inboxes, so any particular inbox that has not recently received a message may be cleared to
+						make room for more active inboxes.
+					</p>
 
-          <p>
-            Content-wise, @site does not allow any e-mail messages having to do with any illegal activities in your
-            country, state, city, or region. Please check with your local law enforcement agency for more information.
-          </p>
+					<p>
+						Content-wise, @site does not allow any e-mail messages having to do with any illegal activities in your
+						country, state, city, or region. Please check with your local law enforcement agency for more information.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>@site Also Blocks Spam.</h3>
+					<h3>@site Also Blocks Spam.</h3>
 
-          <p>
-            Before a message makes its way into an inbox, it needs to get through multiple spam filters. These filters
-            are proven to reduce the overall amount of spam by more than 90%, so @site inboxes won't be flooded by
-            junk e-mail. Here are some of the filters that messages are subjected to:
-          </p>
+					<p>
+						Before a message makes its way into an inbox, it needs to get through multiple spam filters. These filters
+						are proven to reduce the overall amount of spam by more than 90%, so @site inboxes won't be flooded by
+						junk e-mail. Here are some of the filters that messages are subjected to:
+					</p>
 
-          <p>
-            E-mail servers are checked to ensure that they aren't flooding @site with connections, or have bad
-            spam reputations, or are listed on any of multiple network-based blacklists.
-          </p>
+					<p>
+						E-mail servers are checked to ensure that they aren't flooding @site with connections, or have bad
+						spam reputations, or are listed on any of multiple network-based blacklists.
+					</p>
 
-          <p>
-            From addresses are checked to ensure that messages from a domain are coming from valid e-mail servers in
-            that domain.
-          </p>
+					<p>
+						From addresses are checked to ensure that messages from a domain are coming from valid e-mail servers in
+						that domain.
+					</p>
 
-          <p>
-            All connections are then greylisted, meaning that only valid e-mail servers are allowed to deliver
-            messages to @site inboxes.
-          </p>
+					<p>
+						All connections are then greylisted, meaning that only valid e-mail servers are allowed to deliver
+						messages to @site inboxes.
+					</p>
 
-          <p>
-            Finally, message subjects are checked to make sure @site isn't getting bombarded by the same message over
-            and over again.
-          </p>
+					<p>
+						Finally, message subjects are checked to make sure @site isn't getting bombarded by the same message over
+						and over again.
+					</p>
 
-          <p>
-            Only after a message passes through all of these filters will it be delivered to an inbox. Even though
-            @site may get a huge amount of attempted connections, nearly all spam messages to @site will be rejected.
-          </p>
+					<p>
+						Only after a message passes through all of these filters will it be delivered to an inbox. Even though
+						@site may get a huge amount of attempted connections, nearly all spam messages to @site will be rejected.
+					</p>
 
-          <hr>
+					<hr>
 
-          <h3>Try @site Out - You'll Love It!</h3>
+					<h3>Try @site Out - You'll Love It!</h3>
 
-          <p>
-            The next time a web form or app asks you to "please enter your e-mail address" you'll be ready. "No
-            problem, it's @{ "whatever@" + domain + "." }" When that site sells your e-mail address, you can shrug,
-            move onto another disposable @site address, and your real e-mail won't get filled with junk mail.
-          </p>
+					<p>
+						The next time a web form or app asks you to "please enter your e-mail address" you'll be ready. "No
+						problem, it's @{ "whatever@" + domain + "." }" When that site sells your e-mail address, you can shrug,
+						move onto another disposable @site address, and your real e-mail won't get filled with junk mail.
+					</p>
 
-          <p>
-            Need some help picking the perfect address? A good strategy is to include the name of the site or app in
-            the address itself, that way you know immediately which sites are suspect with regards to your privacy.
-          </p>
+					<p>
+						Need some help picking the perfect address? A good strategy is to include the name of the site or app in
+						the address itself, that way you know immediately which sites are suspect with regards to your privacy.
+					</p>
 
-          <p>
-            For example: @{ "MyGreatAddress.SiteA@" + domain } or @{ "MyGreatAddress.AppA@" + domain } or
-            @{ "MyGreatAddress.SiteB@" + domain } and so on.
-          </p>
+					<p>
+						For example: @{ "MyGreatAddress.SiteA@" + domain } or @{ "MyGreatAddress.AppA@" + domain } or
+						@{ "MyGreatAddress.SiteB@" + domain } and so on.
+					</p>
 
-        </div>
-      </div>
-    </div>
-  </section>
+				</div>
+			</div>
+		</div>
+	</section>
 
 }

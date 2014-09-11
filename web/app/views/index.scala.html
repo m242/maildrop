@@ -6,116 +6,116 @@
 
 @template("index", "") {
 
-  <section id=banner>
-    <div class=container>
-      <div class=grid>
-        <div class="unit span-grid">
-          <h1>Save your inbox from spam.</h1>
-          <h2>Use @site when you don't want to give out your real address.</h2>
-        </div>
-      </div>
-    </div>
-  </section>
+	<section id=banner>
+		<div class=container>
+			<div class=grid>
+				<div class="unit span-grid">
+					<h1>Save your inbox from spam.</h1>
+					<h2>Use @site when you don't want to give out your real address.</h2>
+				</div>
+			</div>
+		</div>
+	</section>
 
-  <section id=custom>
-    <div class=container>
-      <div class=grid>
-        <div class="unit left one-of-two">
-          <div class=triangle-down></div>
-          <h3>Make up your own e-mail address.</h3>
-          <p>
-            No signup required - @site is free for anyone to use when you need a quick, disposable e-mail address.
-          </p>
-          <form method=post class=inbox-form action="@routes.Application.postInbox()">
-            <input id=inbox type=text class=mailbox maxlength="@maxInbox" name=mailbox placeholder="view-this-mailbox">
-            <label for=inbox>@{ "@ " + domain }</label>
-            <button type=submit>GO<i class=icon-right-open></i></button>
-          </form>
-        </div>
-        <div class="unit right one-of-two">
-          <h3>Want a suggestion?</h3>
-          <p>
-            Don't worry, we've got you covered. Use this wherever you need an e-mail address.
-          </p>
-          <div id=suggestion data-domain="@domain"><a href="/inbox/@{ suggestion.toLowerCase }">@{ suggestion + "@" + domain }</a></div>
-          <div class=clipboard-controls>
-            <a id=clipboard class=clipboard data-clipboard-target=suggestion href="#"><i class=icon-publish></i></a>
-          </div>
-          <script src='@routes.Assets.at("javascripts/ZeroClipboard.min.js")'></script>
-          <p id=suggestion-fill>
+	<section id=custom>
+		<div class=container>
+			<div class=grid>
+				<div class="unit left one-of-two">
+					<div class=triangle-down></div>
+					<h3>Make up your own e-mail address.</h3>
+					<p>
+						No signup required - @site is free for anyone to use when you need a quick, disposable e-mail address.
+					</p>
+					<form method=post class=inbox-form action="@routes.Application.postInbox()">
+						<input id=inbox type=text class=mailbox maxlength="@maxInbox" name=mailbox placeholder="view-this-mailbox">
+						<label for=inbox>@{ "@ " + domain }</label>
+						<button type=submit>GO<i class=icon-right-open></i></button>
+					</form>
+				</div>
+				<div class="unit right one-of-two">
+					<h3>Want a suggestion?</h3>
+					<p>
+						Don't worry, we've got you covered. Use this wherever you need an e-mail address.
+					</p>
+					<div id=suggestion data-domain="@domain"><a href="/inbox/@{ suggestion.toLowerCase }">@{ suggestion + "@" + domain }</a></div>
+					<div class=clipboard-controls>
+						<a id=clipboard class=clipboard data-clipboard-target=suggestion href="#"><i class=icon-publish></i></a>
+					</div>
+					<script src="@routes.Assets.versioned("javascripts/ZeroClipboard.min.js")"></script>
+					<p id=suggestion-fill>
 
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
-  <section id=great>
-    <div class=container>
-      <div class=grid>
-        <div class="unit top span-grid">
-          <div class=triangle-down></div>
-          <h3>@site is a great idea when you...</h3>
-          <i class=icon-down-open></i>
-        </div>
-        <div class="unit left one-of-three">
-          ...want to sign up for a website but you're concerned that they might share your address with advertisers.
-        </div>
-        <div class="unit middle one-of-three">
-          ...are required to provide an e-mail address to a mobile app that shouldn't be sending you messages.
-        </div>
-        <div class="unit right one-of-three">
-          ...are making a one-off purchase from an e-commerce site where you don't want followup spam about their "latest deals"
-          in your inbox.
-        </div>
-        <div class="unit left one-of-three">
-          ...publish your e-mail address in a place that it could be picked up by address-harvesting spam bots.
-        </div>
-        <div class="unit middle one-of-three">
-          ...give your address to companies that have a track record of less-than-stellar security.
-        </div>
-        <div class="unit right one-of-three">
-          <h3>Using @site in an interesting way?</h3>
-          <a href="@routes.Application.contact()">Let us know!</a>
-        </div>
-      </div>
-    </div>
-  </section>
+	<section id=great>
+		<div class=container>
+			<div class=grid>
+				<div class="unit top span-grid">
+					<div class=triangle-down></div>
+					<h3>@site is a great idea when you...</h3>
+					<i class=icon-down-open></i>
+				</div>
+				<div class="unit left one-of-three">
+					...want to sign up for a website but you're concerned that they might share your address with advertisers.
+				</div>
+				<div class="unit middle one-of-three">
+					...are required to provide an e-mail address to a mobile app that shouldn't be sending you messages.
+				</div>
+				<div class="unit right one-of-three">
+					...are making a one-off purchase from an e-commerce site where you don't want followup spam about their "latest deals"
+					in your inbox.
+				</div>
+				<div class="unit left one-of-three">
+					...publish your e-mail address in a place that it could be picked up by address-harvesting spam bots.
+				</div>
+				<div class="unit middle one-of-three">
+					...give your address to companies that have a track record of less-than-stellar security.
+				</div>
+				<div class="unit right one-of-three">
+					<h3>Using @site in an interesting way?</h3>
+					<a href="@routes.Application.contact()">Let us know!</a>
+				</div>
+			</div>
+		</div>
+	</section>
 
-  <section id=spam>
-    <div class=container>
-      <div class=grid>
-        <div class="unit left one-of-two">
-          <div class=triangle-down></div>
-          <h3>Spam won't hit your @site inbox, either.</h3>
-          <p>
-            @site is powered by some of the spam filters created by <a href="https://heluna.com/">Heluna</a>, used in
-            order to block almost all spam attempts before they even get to your @site inbox.
-          </p>
-          <p>
-            Even though @site is a disposable inbox, you won't see a ton of spam messages when it comes time to check
-            your e-mail.
-          </p>
-        </div>
-        <div class="unit right one-of-two">
-          <h3>Messages blocked by @site:</h3>
-          <h2 id=blocked>@blocked</h2>
-          <i id=trash class=icon-trash></i>
-        </div>
-      </div>
-    </div>
-  </section>
+	<section id=spam>
+		<div class=container>
+			<div class=grid>
+				<div class="unit left one-of-two">
+					<div class=triangle-down></div>
+					<h3>Spam won't hit your @site inbox, either.</h3>
+					<p>
+						@site is powered by some of the spam filters created by <a href="https://heluna.com/">Heluna</a>, used in
+						order to block almost all spam attempts before they even get to your @site inbox.
+					</p>
+					<p>
+						Even though @site is a disposable inbox, you won't see a ton of spam messages when it comes time to check
+						your e-mail.
+					</p>
+				</div>
+				<div class="unit right one-of-two">
+					<h3>Messages blocked by @site:</h3>
+					<h2 id=blocked>@blocked</h2>
+					<i id=trash class=icon-trash></i>
+				</div>
+			</div>
+		</div>
+	</section>
 
-  <section id=opensource>
-    <div class=container>
-      <div class=grid>
-        <div class="unit span-grid">
-          <div class=triangle-down></div>
-          <h3>@site is open source.</h3>
-          <p>Contribute to @site's <a href="https://github.com/m242/maildrop">development on Github</a>.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+	<section id=opensource>
+		<div class=container>
+			<div class=grid>
+				<div class="unit span-grid">
+					<div class=triangle-down></div>
+					<h3>@site is open source.</h3>
+					<p>Contribute to @site's <a href="https://github.com/m242/maildrop">development on Github</a>.</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
 }
