@@ -8,7 +8,7 @@ lazy val root = Project(id="web", base=file(".")).dependsOn(common).enablePlugin
 
 pipelineStages := Seq(uglify, digest, gzip)
 
-scalaVersion := "2.11.2"
+scalaVersion := "2.10.4"
 
 resolvers ++= Seq(
 	"rediscala" at "http://dl.bintray.com/etaty/maven",

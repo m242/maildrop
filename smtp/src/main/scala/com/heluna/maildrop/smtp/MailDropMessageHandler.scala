@@ -7,7 +7,7 @@ import javax.mail.{Multipart, BodyPart, Session}
 import javax.mail.internet.MimeMessage
 import com.heluna.maildrop.smtp.filters._
 import com.heluna.maildrop.util.{Mailbox, Metrics, MailDropConfig}
-import com.typesafe.scalalogging.LazyLogging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import org.subethamail.smtp.{RejectException, DropConnectionException, MessageHandler, MessageContext}
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{Await, Future}
@@ -43,8 +43,25 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 		Thread.sleep(MailDropMessageHandler.threadDelay)
 
 		// Run the sender filter, either Greylist, Reject, Accept or Continue
-		val future = MailDropMessageHandler.senderFilter(inet, helo, sender)
-		Await.result(future, 2.minutes) match {
+//		val future = MailDropMessageHandler.senderFilter(inet, helo, sender)
+//		Await.result(future, 2.minutes) match {
+//			case Greylist(reason) =>
+//				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
+//				Metrics.blocked()
+//				throw new DropConnectionException(421, reason)
+//			case Reject(reason) =>
+//				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
+//				Metrics.blocked()
+//				throw new DropConnectionException(reason)
+//			case _ =>
+//		}
+		val greylistFuture = GreylistFilter(inet, helo)
+		val greylistResult = Try(Await.result(greylistFuture, 2.minutes)).getOrElse({
+			logger.error("GreylistFilter failed")
+			Continue()
+		})
+
+		greylistResult match {
 			case Greylist(reason) =>
 				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
 				Metrics.blocked()
@@ -55,6 +72,61 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 				throw new DropConnectionException(reason)
 			case _ =>
 		}
+
+		val cacheFuture = CacheFilter(inet, helo)
+		val cacheResult = Try(Await.result(cacheFuture, 2.minutes)).getOrElse({
+			logger.error("CacheFilter failed")
+			Continue()
+		})
+
+		cacheResult match {
+			case Greylist(reason) =>
+				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
+				Metrics.blocked()
+				throw new DropConnectionException(421, reason)
+			case Reject(reason) =>
+				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
+				Metrics.blocked()
+				throw new DropConnectionException(reason)
+			case _ =>
+		}
+
+		val dnsblFuture = DNSBLFilter(inet, helo)
+		val dnsblResult = Try(Await.result(dnsblFuture, 2.minutes)).getOrElse({
+			logger.error("DNSBLFilter failed")
+			Continue()
+		})
+
+		dnsblResult match {
+			case Greylist(reason) =>
+				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
+				Metrics.blocked()
+				throw new DropConnectionException(421, reason)
+			case Reject(reason) =>
+				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
+				Metrics.blocked()
+				throw new DropConnectionException(reason)
+			case _ =>
+		}
+
+		val spfFuture = SPFFilter(inet, helo, sender)
+		val spfResult = Try(Await.result(spfFuture, 2.minutes)).getOrElse({
+			logger.error("SPFFilter failed")
+			Continue()
+		})
+
+		spfResult match {
+			case Greylist(reason) =>
+				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
+				Metrics.blocked()
+				throw new DropConnectionException(421, reason)
+			case Reject(reason) =>
+				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
+				Metrics.blocked()
+				throw new DropConnectionException(reason)
+			case _ =>
+		}
+
 	}
 
 	override def recipient(addr: String): Unit = {
@@ -123,13 +195,22 @@ object MailDropMessageHandler extends LazyLogging {
 
 	def senderFilter(inet: InetAddress, helo: String, sender: String): Future[Product] = {
 		GreylistFilter(inet, helo) flatMap {
-			case Continue() => CacheFilter(inet, helo)
+			case Continue() => Try(CacheFilter(inet, helo)).getOrElse({
+				logger.error("CacheFilter failed")
+				Future.successful(Continue())
+			})
 			case result => Future.successful(result)
 		} flatMap {
-			case Continue() => DNSBLFilter(inet, helo)
+			case Continue() => Try(DNSBLFilter(inet, helo)).getOrElse({
+				logger.error("DNSBLFilter failed")
+				Future.successful(Continue())
+			})
 			case result => Future.successful(result)
 		} flatMap {
-			case Continue() => SPFFilter(inet, helo, sender)
+			case Continue() => Try(SPFFilter(inet, helo, sender)).getOrElse({
+				logger.error("SPFFilter failed")
+				Future.successful(Continue())
+			})
 			case result => Future.successful(result)
 		}
 	}

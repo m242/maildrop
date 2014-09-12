@@ -1,7 +1,6 @@
 package com.heluna.maildrop.smtp.filters
 
 import java.net.InetAddress
-
 import com.heluna.maildrop.smtp.{Reject, Continue}
 import com.heluna.maildrop.util.MailDropConfig
 import org.xbill.DNS.{TXTRecord, Type, Lookup, Address}

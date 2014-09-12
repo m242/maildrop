@@ -3,7 +3,7 @@ package com.heluna.maildrop.smtp.filters
 import java.net.InetAddress
 import com.heluna.maildrop.smtp.{Continue, Reject, Accept}
 import com.heluna.maildrop.util.{MailDropConfig, Redis}
-import com.typesafe.scalalogging.LazyLogging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

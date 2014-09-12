@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Class-Path: command-0.13.5.jar apply-macro-0.13.5.jar main-settings-0.
+ 13.5.jar control-0.13.5.jar testing-0.13.5.jar completion-0.13.5.jar 
+ tracking-0.13.5.jar main-0.13.5.jar sbinary_2.10-0.4.2.jar jline-2.11
+ .jar test-agent-0.13.5.jar ivy-2.3.0.jar scala-reflect-2.10.4.jar per
+ sist-0.13.5.jar run-0.13.5.jar test-interface-1.0.jar logic-0.13.5.ja
+ r ivy-0.13.5.jar collections-0.13.5.jar launcher-interface-0.13.5.jar
+  task-system-0.13.5.jar compiler-ivy-integration-0.13.5.jar process-0
+ .13.5.jar cache-0.13.5.jar jsch-0.1.46.jar api-0.13.5.jar incremental
+ -compiler-0.13.5.jar interface-0.13.5.jar jline.jar cross-0.13.5.jar 
+ compiler-integration-0.13.5.jar relation-0.13.5.jar actions-0.13.5.ja
+ r jansi.jar scala-compiler.jar scala-library.jar io-0.13.5.jar sbt-0.
+ 13.5.jar scala-reflect.jar logging-0.13.5.jar classpath-0.13.5.jar co
+ mpile-0.13.5.jar tasks-0.13.5.jar classfile-0.13.5.jar logback-core-1
+ .1.2.jar rediscala_2.10-1.3.1.jar scala-stm_2.10-0.7.jar activation-1
+ .1.1.jar play-datacommons_2.10-2.3.4.jar akka-actor_2.10-2.3.6.jar ja
+ ckson-databind-2.3.2.jar commons-cli-1.2.jar scala-reflect.jar jsr305
+ -1.3.9.jar logback-classic-1.1.2.jar play-functional_2.10-2.3.4.jar j
+ oda-time-2.3.jar config-1.2.1.jar jackson-annotations-2.3.2.jar jacks
+ on-core-2.3.2.jar subethasmtp-3.1.7.jar joda-convert-1.6.jar scala-lo
+ gging-slf4j_2.10-2.1.2.jar slf4j-api-1.7.7.jar log4j-1.2.14.jar play-
+ iteratees_2.10-2.3.4.jar scala-library.jar dnsjava-2.1.6.jar scala-lo
+ gging-api_2.10-2.1.2.jar play-json_2.10-2.3.4.jar mail-1.4.4.jar dnsj
+ nio-1.0.3.jar apache-jspf-resolver-1.0.0.jar
+Main-Class: com.heluna.maildrop.smtp.MailDropSMTP
+

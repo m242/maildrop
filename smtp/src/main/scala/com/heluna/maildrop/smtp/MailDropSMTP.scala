@@ -2,7 +2,7 @@ package com.heluna.maildrop.smtp
 
 import java.util.Date
 import com.heluna.maildrop.util.MailDropConfig
-import com.typesafe.scalalogging.LazyLogging
+import com.typesafe.scalalogging.slf4j.LazyLogging
 import org.subethamail.smtp.server.SMTPServer
 
 /**
