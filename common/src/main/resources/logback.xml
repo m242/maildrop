@@ -6,6 +6,7 @@
 			<pattern>%d{HH:mm:ss.SSS} [%level] %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
+	<logger name="com.heluna.maildrop.smtp.filters.SPFLogger" level="ERROR"/>
 	<root level="info">
 		<appender-ref ref="STDOUT"/>
 	</root>

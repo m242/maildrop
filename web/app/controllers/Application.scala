@@ -5,7 +5,7 @@ import java.util.{Properties, Date}
 import javax.mail.{Multipart, BodyPart}
 import javax.mail.internet.MimeMessage
 import akka.actor.{PoisonPill, Props}
-import com.heluna.maildrop.util.{Mailbox, Metrics}
+import com.heluna.maildrop.util.{Redis, Mailbox, Metrics}
 import play.api.Play
 import play.api.data.Form
 import play.api.libs.concurrent.Akka
@@ -27,6 +27,7 @@ object Application extends Controller {
 	val nounsLen = nouns.length
 	val rand = new Random(System.currentTimeMillis())
 	val sdf = new java.text.SimpleDateFormat(Play.current.configuration.getString("maildrop.dateformat").getOrElse("MMM d yyyy hh:mm a"))
+
 
 	def index = Action.async {
 		Metrics.getBlocked.map(blocked => Ok(views.html.index(getSuggestion, blocked)))

@@ -42,26 +42,8 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 		// Wait maildrop.command-delay seconds
 		Thread.sleep(MailDropMessageHandler.threadDelay)
 
-		// Run the sender filter, either Greylist, Reject, Accept or Continue
-//		val future = MailDropMessageHandler.senderFilter(inet, helo, sender)
-//		Await.result(future, 2.minutes) match {
-//			case Greylist(reason) =>
-//				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
-//				Metrics.blocked()
-//				throw new DropConnectionException(421, reason)
-//			case Reject(reason) =>
-//				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
-//				Metrics.blocked()
-//				throw new DropConnectionException(reason)
-//			case _ =>
-//		}
-		val greylistFuture = GreylistFilter(inet, helo)
-		val greylistResult = Try(Await.result(greylistFuture, 2.minutes)).getOrElse({
-			logger.error("GreylistFilter failed")
-			Continue()
-		})
-
-		greylistResult match {
+		val future = MailDropMessageHandler.senderFilter(inet, helo, sender)
+		Await.result(future, 2.minutes) match {
 			case Greylist(reason) =>
 				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
 				Metrics.blocked()
@@ -69,60 +51,8 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 			case Reject(reason) =>
 				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
 				Metrics.blocked()
-				throw new DropConnectionException(reason)
-			case _ =>
-		}
-
-		val cacheFuture = CacheFilter(inet, helo)
-		val cacheResult = Try(Await.result(cacheFuture, 2.minutes)).getOrElse({
-			logger.error("CacheFilter failed")
-			Continue()
-		})
-
-		cacheResult match {
-			case Greylist(reason) =>
-				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
-				Metrics.blocked()
-				throw new DropConnectionException(421, reason)
-			case Reject(reason) =>
-				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
-				Metrics.blocked()
-				throw new DropConnectionException(reason)
-			case _ =>
-		}
-
-		val dnsblFuture = DNSBLFilter(inet, helo)
-		val dnsblResult = Try(Await.result(dnsblFuture, 2.minutes)).getOrElse({
-			logger.error("DNSBLFilter failed")
-			Continue()
-		})
-
-		dnsblResult match {
-			case Greylist(reason) =>
-				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
-				Metrics.blocked()
-				throw new DropConnectionException(421, reason)
-			case Reject(reason) =>
-				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
-				Metrics.blocked()
-				throw new DropConnectionException(reason)
-			case _ =>
-		}
-
-		val spfFuture = SPFFilter(inet, helo, sender)
-		val spfResult = Try(Await.result(spfFuture, 2.minutes)).getOrElse({
-			logger.error("SPFFilter failed")
-			Continue()
-		})
-
-		spfResult match {
-			case Greylist(reason) =>
-				logger.info("Sender " + ip + " " + sender + " greylisted: " + reason)
-				Metrics.blocked()
-				throw new DropConnectionException(421, reason)
-			case Reject(reason) =>
-				logger.info("Sender " + ip + " " + sender + " rejected: " + reason)
-				Metrics.blocked()
+				CacheFilter.add(inet, helo, Reject(reason))
+				HostEntry.touch(inet, helo)
 				throw new DropConnectionException(reason)
 			case _ =>
 		}
@@ -166,11 +96,18 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 						throw new RejectException(reason)
 					case Continue() =>
 						// Save the message
-						MailDropMessageHandler.saveMessage(sender, recipient, message)
-						logger.info("Message saved from " + ip + " " + sender + " to " + recipient)
-						// Cache this sender
-						CacheFilter.add(inet, helo, Accept())
-						Metrics.message()
+						Try(MailDropMessageHandler.saveMessage(sender, recipient, message)).toOption match {
+							case Some(x) =>
+								logger.info("Message saved from " + ip + " " + sender + " to " + recipient)
+								// Cache this sender
+								CacheFilter.add(inet, helo, Accept())
+								HostEntry.touch(inet, helo)
+								Metrics.message()
+							case None =>
+								logger.info("Data from " + ip + " " + sender + " to " + recipient + " rejected: no attachments")
+								Metrics.blocked()
+								throw new RejectException("No attachments allowed.")
+						}
 				}
 			case _ =>
 		}
@@ -180,6 +117,7 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 	override def done(): Unit = {
 		logger.debug("Ending connection from " + ip)
 	}
+
 
 }
 
@@ -194,23 +132,18 @@ object MailDropMessageHandler extends LazyLogging {
 	val maxMessageReason = MailDropConfig("maildrop.data.max-message-reason").getOrElse("Message too large.")
 
 	def senderFilter(inet: InetAddress, helo: String, sender: String): Future[Product] = {
-		GreylistFilter(inet, helo) flatMap {
-			case Continue() => Try(CacheFilter(inet, helo)).getOrElse({
-				logger.error("CacheFilter failed")
-				Future.successful(Continue())
-			})
-			case result => Future.successful(result)
-		} flatMap {
-			case Continue() => Try(DNSBLFilter(inet, helo)).getOrElse({
-				logger.error("DNSBLFilter failed")
-				Future.successful(Continue())
-			})
-			case result => Future.successful(result)
-		} flatMap {
-			case Continue() => Try(SPFFilter(inet, helo, sender)).getOrElse({
-				logger.error("SPFFilter failed")
-				Future.successful(Continue())
-			})
+		for {
+			host <- HostEntry(inet, helo)
+			cache <- trySenderFilter(Continue(), { CacheFilter(host) })
+			greylist <- trySenderFilter(cache, { GreylistFilter(host, inet, helo) })
+			spf <- trySenderFilter(greylist, { SPFFilter(inet, helo, sender) })
+			dnsbl <- trySenderFilter(spf, { DNSBLFilter(inet, helo) })
+		} yield dnsbl
+	}
+
+	def trySenderFilter(prevResult: Product, filter: => Future[Product]): Future[Product] = {
+		prevResult match {
+			case Continue() => filter
 			case result => Future.successful(result)
 		}
 	}
@@ -234,13 +167,14 @@ object MailDropMessageHandler extends LazyLogging {
 		}
 	}
 
-	def saveMessage(sender: String, recipient: String, message: MimeMessage): Unit = {
+	def saveMessage(sender: String, recipient: String, message: MimeMessage): Boolean = {
 		// Strip attachments from the message
 		val newmessage = stripAttachments(message)
 		val baos = new ByteArrayOutputStream()
 		newmessage.writeTo(baos)
 		// Add the message to the mailbox
 		Mailbox.add(sender, recipient, Option(message.getSubject).getOrElse("(no subject)"), Option(message.getSentDate).getOrElse(new Date()), baos.toString("UTF-8"))
+		true
 	}
 
 	def stripAttachments(message: MimeMessage): MimeMessage = {

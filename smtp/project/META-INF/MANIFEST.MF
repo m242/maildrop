@@ -11,16 +11,17 @@ Class-Path: command-0.13.5.jar apply-macro-0.13.5.jar main-settings-0.
  compiler-integration-0.13.5.jar relation-0.13.5.jar actions-0.13.5.ja
  r jansi.jar scala-compiler.jar scala-library.jar io-0.13.5.jar sbt-0.
  13.5.jar scala-reflect.jar logging-0.13.5.jar classpath-0.13.5.jar co
- mpile-0.13.5.jar tasks-0.13.5.jar classfile-0.13.5.jar logback-core-1
- .1.2.jar rediscala_2.10-1.3.1.jar scala-stm_2.10-0.7.jar activation-1
- .1.1.jar play-datacommons_2.10-2.3.4.jar akka-actor_2.10-2.3.6.jar ja
- ckson-databind-2.3.2.jar commons-cli-1.2.jar scala-reflect.jar jsr305
- -1.3.9.jar logback-classic-1.1.2.jar play-functional_2.10-2.3.4.jar j
- oda-time-2.3.jar config-1.2.1.jar jackson-annotations-2.3.2.jar jacks
- on-core-2.3.2.jar subethasmtp-3.1.7.jar joda-convert-1.6.jar scala-lo
- gging-slf4j_2.10-2.1.2.jar slf4j-api-1.7.7.jar log4j-1.2.14.jar play-
- iteratees_2.10-2.3.4.jar scala-library.jar dnsjava-2.1.6.jar scala-lo
- gging-api_2.10-2.1.2.jar play-json_2.10-2.3.4.jar mail-1.4.4.jar dnsj
- nio-1.0.3.jar apache-jspf-resolver-1.0.0.jar
+ mpile-0.13.5.jar tasks-0.13.5.jar classfile-0.13.5.jar logback-classi
+ c-1.1.2.jar rediscala_2.10-1.3.1.jar scala-stm_2.10-0.7.jar play-iter
+ atees_2.10-2.3.4.jar dnsjnio-1.0.3.jar akka-actor_2.10-2.3.6.jar jack
+ son-databind-2.3.2.jar subethasmtp-3.1.7.jar scala-reflect.jar play-f
+ unctional_2.10-2.3.4.jar commons-io-2.4.jar joda-time-2.3.jar jsr305-
+ 1.3.9.jar config-1.2.1.jar dnsjava-2.1.6.jar jackson-annotations-2.3.
+ 2.jar jackson-core-2.3.2.jar apache-jspf-resolver-1.0.0.jar log4j-1.2
+ .14.jar activation-1.1.1.jar logback-core-1.1.2.jar joda-convert-1.6.
+ jar scala-library.jar commons-codec-1.9.jar scala-logging-slf4j_2.10-
+ 2.1.2.jar commons-cli-1.2.jar play-json_2.10-2.3.4.jar play-datacommo
+ ns_2.10-2.3.4.jar scala-logging-api_2.10-2.1.2.jar mail-1.4.4.jar slf
+ 4j-api-1.7.7.jar
 Main-Class: com.heluna.maildrop.smtp.MailDropSMTP
 

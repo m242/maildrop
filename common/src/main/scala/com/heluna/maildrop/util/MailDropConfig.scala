@@ -4,6 +4,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 import com.typesafe.config.{Config, ConfigFactory}
 import scala.util.Try
+import scala.collection.JavaConversions._
 
 /**
  * common com.heluna.maildrop
@@ -28,7 +29,7 @@ object MailDropConfig {
 
 	def getString(key: String): Option[String] = Try(Option(config.getString(key))).toOption.flatten
 
-	def getStringList(key: String): List[String] = Try(getStringList(key)).toOption.getOrElse(List[String]())
+	def getStringList(key: String): List[String] = Try(config.getStringList(key).toList).toOption.getOrElse(List[String]())
 
 	def apply(key: String) = getString(key)
 
