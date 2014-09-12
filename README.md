@@ -98,9 +98,7 @@ finely tuned (custom dispatchers, guaranteed message delivery, etc).
 
 Messages are now stored in Redis in json format instead of as serialized
 ByteStrings. The overhead of json parsing on the website is minimal and
-allows for a better overall view of the data inside Redis. The string
-compression has been removed, requiring a bit more RAM for your Redis
-instance, but again this should be a minimal impact.
+allows for a better overall view of the data inside Redis.
 
 Last, Play has been updated to the 2.3 branch, along with automatic
 asset versioning and a much cleaner way to cache assets. Website
