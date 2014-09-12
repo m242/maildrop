@@ -30,7 +30,7 @@ object DNSBLFilter extends LazyLogging {
 			query(hostname).map {
 				case Some(addr) =>
 					logger.debug("DNSBL match " + hostname)
-					Some(reason(hostname).getOrElse("Invalid IP."))
+					Some(reason(hostname).getOrElse("Invalid IP: " + hostname))
 				case None => None
 			}
 		})
