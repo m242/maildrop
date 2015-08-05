@@ -39,7 +39,8 @@ class Index
 	blocked: ->
 		el = M.id "blocked"
 		trash = M.id "trash"
-		socket = new WebSocket("ws://" + window.location.host + "/ws/blocked")
+		wshost = window['MailDropWsHost'] || window.location.host
+		socket = new WebSocket("ws://" + wshost + "/ws/blocked")
 		socket.onmessage = (msg) ->
 			if document.all then el.innerText = msg.data else el.textContent = msg.data
 			el.addClass "add"

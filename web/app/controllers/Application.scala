@@ -5,7 +5,7 @@ import java.util.{Properties, Date}
 import javax.mail.{Multipart, BodyPart}
 import javax.mail.internet.MimeMessage
 import akka.actor.{PoisonPill, Props}
-import com.heluna.maildrop.util.{Redis, Mailbox, Metrics}
+import com.heluna.maildrop.util.{Mailbox, Metrics}
 import play.api.Play
 import play.api.data.Form
 import play.api.libs.concurrent.Akka

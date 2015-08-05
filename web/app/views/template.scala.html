@@ -95,6 +95,9 @@ body, input, p { font-family: "Open Sans", sans-serif; }
 	</div>
 </footer>
 
+<script>
+window.MailDropWsHost = '@{ play.Play.application().configuration().getString("maildrop.wshost") }';
+</script>
 <script src="@routes.Assets.versioned("javascripts/maildrop.js")"></script>
 
 @if(gaEnabled) {
