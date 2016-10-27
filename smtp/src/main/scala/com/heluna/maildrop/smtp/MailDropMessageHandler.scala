@@ -34,13 +34,19 @@ class MailDropMessageHandler(ctx: MessageContext) extends MessageHandler with La
 	override def from(addr: String): Unit = {
 		logger.debug("Starting connection from " + ip)
 		helo = Option(ctx.getHelo).getOrElse(ip).toLowerCase
-		sender = Option(addr).getOrElse("").toLowerCase
+		sender = Option(addr).getOrElse("").toLowerCase.trim
 
 		// Log our connection
 		Metrics.connection()
 
 		// Wait maildrop.command-delay seconds
 		Thread.sleep(MailDropMessageHandler.threadDelay)
+
+		if (sender.length == 0) {
+			logger.info("Sender " + ip + " " + sender + " rejected: no address")
+			Metrics.blocked()
+			throw new DropConnectionException("No sender email address.")
+		}
 
 		val future = MailDropMessageHandler.senderFilter(inet, helo, sender)
 		Await.result(future, 2.minutes) match {

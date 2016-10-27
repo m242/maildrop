@@ -4,7 +4,7 @@ version := "2.0"
 
 lazy val common = RootProject(file("../common"))
 
-val main = Project(id="smtp", base=file(".")).dependsOn(common)
+val main = Project(id="smtp", base=file(".")).dependsOn(common).enablePlugins(JavaAppPackaging)
 
 scalaVersion := "2.10.4"
 
