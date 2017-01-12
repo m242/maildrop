@@ -70,7 +70,7 @@ custom configuration, use "java -Dconfig.file=/path/to/your/application.conf
 
 ### Create the web server
 
-Go into "web" and run "play dist". This will create a zipfile of the MailDrop
+Go into "web" and run "activator dist". This will create a zipfile of the MailDrop
 website. (More information about how to run a Play web app is located on the
 [Play Framework site](http://www.playframework.com/))
 
